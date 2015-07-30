@@ -176,6 +176,7 @@ public class TileReactorCell extends TileInventory implements IMultiBlockStructu
 
                 if (drain != null && drain.amount >= FluidContainerRegistry.BUCKET_VOLUME)
                 {
+                	// ВЫБИРАЕМ НАПРАВЛЕНИЕ ВПРЫСКА ПЛАЗМЫ
                     ForgeDirection spawnDir = ForgeDirection.getOrientation(worldObj.rand.nextInt(3) + 2);
                     Vector3 spawnPos = new Vector3(this).translate(spawnDir, 2);
                     spawnPos.translate(0, Math.max(worldObj.rand.nextInt(getHeight()) - 1, 0), 0);
@@ -185,6 +186,42 @@ public class TileReactorCell extends TileInventory implements IMultiBlockStructu
                         MinecraftForge.EVENT_BUS.post(new SpawnPlasmaEvent(worldObj, spawnPos.intX(), spawnPos.intY(), spawnPos.intZ(), TilePlasma.plasmaMaxTemperature));
                         tank.drain(FluidContainerRegistry.BUCKET_VOLUME, true);
                     }
+                    else{
+                        // рассмотреть случай, когда там не воздух
+                    	int bid = worldObj.getBlockId(spawnPos.intX(), spawnPos.intY(), spawnPos.intZ());
+                    	TileEntity te = spawnPos.getTileEntity(worldObj);
+                    	if(te instanceof TilePlasma){
+                    		// плазма может требовать подкачки на 100 ед
+                    		// ОШИБКА: с объемом менее ведра сюда никогда не придет!
+                    		int temp  = ((TilePlasma) te).getTemperature();
+                    		int diff = ((TilePlasma) te).plasmaMaxTemperature - temp;
+                    		if(diff >= 100000){
+                    			((TilePlasma) te).setTemperature(((TilePlasma) te).getTemperature() + 100000);
+                    			tank.drain(100, true);
+                    		}
+                    	}
+                    }
+                }
+                else{
+               		// тут надо рассмотреть вариант поддержания плазмы
+               		for(int direction=2; direction < 6; direction++){
+               			ForgeDirection finder = ForgeDirection.getOrientation(direction);
+               			Vector3 findPos = new Vector3(this).translate(finder, 2);
+                       	TileEntity te = findPos.getTileEntity(worldObj);
+                       	if(te instanceof TilePlasma){
+                       		// плазма найдена, скинем сотку, если нужно (T += MAX/10)
+                        	int amount = tank.getFluidAmount();
+
+                        	if(amount >= 100){
+                        		int theytemp = ((TilePlasma) te).getTemperature();
+                        		if(theytemp < TilePlasma.plasmaMaxTemperature *9/10){
+                        			// если температура плазмы ниже, чем 9/10 от максимума...
+                        			((TilePlasma) te).setTemperature(theytemp + TilePlasma.plasmaMaxTemperature/10);
+                        			tank.drain(100, true);
+                        		}
+                        	}
+                		}
+                	}
                 }
             }
             else

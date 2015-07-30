@@ -1,6 +1,7 @@
 package resonantinduction.atomic.particle.accelerator;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -56,6 +57,8 @@ public class TileAccelerator extends TileElectricalInventory implements IElectro
 
     public TileAccelerator()
     {
+    	//super(Material.iron);	// отсутствие оного вызывало ошибку
+    	super();
         energy = new EnergyStorageHandler(energyPerTick * 2, energyPerTick / 20);
         maxSlots = 4;
         antiMatterDensityMultiplyer = DENSITY_MULTIPLYER_DEFAULT;

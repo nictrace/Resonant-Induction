@@ -29,7 +29,8 @@ import com.google.common.io.ByteArrayDataInput;
 
 public class TilePlasmaHeater extends TileElectrical implements IPacketReceiver, ITagRender, IFluidHandler
 {
-    public static long DIAN = 10000000000L;
+    @Config
+	public static long power_max = 1000000000L;	// уменьшил до 50МДж на порцию
 
     @Config
     public static int plasmaHeatAmount = 100;
@@ -42,7 +43,7 @@ public class TilePlasmaHeater extends TileElectrical implements IPacketReceiver,
 
     public TilePlasmaHeater()
     {
-        energy = new EnergyStorageHandler(DIAN, DIAN / 20);
+        energy = new EnergyStorageHandler(power_max, power_max / 20);
     }
 
     @Override
@@ -77,7 +78,7 @@ public class TilePlasmaHeater extends TileElectrical implements IPacketReceiver,
             }
         }
 
-        if (ticks % 80 == 0)
+        if (ticks % 80 == 0) // раз в 4 сек тревожим клиентов
         {
             PacketHandler.sendPacketToClients(getDescriptionPacket(), worldObj, new Vector3(this), 25);
         }

@@ -41,6 +41,7 @@ public class TileQuantumAssembler extends TileElectricalInventory implements IPa
     public TileQuantumAssembler()
     {
         super(Material.iron);
+    	//super();
         energy = new EnergyStorageHandler(ENERGY, ENERGY / 10);
         maxSlots = 7;
         isOpaqueCube = false;

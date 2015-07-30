@@ -151,6 +151,9 @@ public class Settings
     
     @Config
     public static double darkMatterSpawnChance = 0.2;
+    
+    @Config(comment = "Plasma auto cooling, %, 0-100; 0 - full cooling, 100 - never cooling; default:95")
+    public static int plasmaAutoCooling = 95;
 
     public static void setModMetadata(ModMetadata metadata, String id, String name)
     {

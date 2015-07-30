@@ -14,7 +14,7 @@ import resonant.lib.network.IPacketReceiverWithID;
  * 
  * @author DarkGuardsman
  */
-public abstract class TilePressureNode extends TileFluidNode implements IPressureNodeProvider, IPacketReceiverWithID
+public abstract class TilePressureNode extends TileFluidNode implements IPacketReceiverWithID, IPressureNodeProvider
 {
 	protected FluidPressureNode node;
 
@@ -92,11 +92,12 @@ public abstract class TilePressureNode extends TileFluidNode implements IPressur
 		return getInternalTank();
 	}
 
-	@Override
-	public INode getNode(Class<? extends INode> nodeType, ForgeDirection from)
+	@Override	
+	//public INode getNode(Class<? extends INode> nodeType, ForgeDirection from)
+	public <N extends INode> N getNode(Class<? super N> nodeType, ForgeDirection from)	
 	{
 		if (nodeType.isAssignableFrom(node.getClass()))
-			return node;
+			return (N) node;
 		return null;
 	}
 }

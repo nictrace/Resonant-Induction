@@ -8,8 +8,13 @@ import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
+import net.minecraft.world.World;
+import net.minecraft.tileentity.TileEntity;
+import resonant.lib.content.module.TileBase;
 import resonant.lib.prefab.block.BlockTile;
 import resonantinduction.core.Reference;
+import resonantinduction.core.resource.TileMaterial;
+
 
 /**
  * A block used to build machines or decoration.
@@ -55,5 +60,10 @@ public class BlockIndustrialStone extends BlockTile
 	{
 		for (int i = 0; i < iconNames.length; i++)
 			par3List.add(new ItemStack(par1, 1, i));
+	}
+	
+	@Override
+	public TileEntity createNewTileEntity(World world){	// этой заглушки требует вышесто€щий интерфейс
+		return null;
 	}
 }

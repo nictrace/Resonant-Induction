@@ -629,6 +629,8 @@ public class Atomic
     @ForgeSubscribe
     public void thermalEventHandler(EventThermalUpdate evt)
     {
+//        System.out.printf("*** EventThermalUpdate()\n");
+// вызывается каждый такт    	
         VectorWorld pos = evt.position;
         Block block = Block.blocksList[pos.getBlockID()];
 
@@ -638,9 +640,11 @@ public class Atomic
         }
     }
 
+    /* Сюда приходят события новой плазмы! */
     @ForgeSubscribe
     public void plasmaEvent(SpawnPlasmaEvent evt)
     {
+        System.out.printf("*** SpawnPlasmaEvent()\n");
         World world = evt.world;
         Vector3 position = new Vector3(evt.x, evt.y, evt.z);
         int blockID = position.getBlockID(world);
@@ -649,6 +653,7 @@ public class Atomic
 
         if (block != null)
         {
+        	// а какого блок железа-то?
             if (block.blockID == Block.bedrock.blockID || block.blockID == Block.blockIron.blockID)
             {
                 return;
@@ -667,14 +672,18 @@ public class Atomic
                 return;
             }
         }
+        // здесь сделать удаление блока!
+        // не удаляем блоки пламени, но даем бонус к температуре!
+        
+        if(!world.isRemote){ // only on server
+        
+        	position.setBlock(world, blockPlasma.blockID);
+        	TileEntity tile = position.getTileEntity(world);
 
-        position.setBlock(world, blockPlasma.blockID);
-
-        TileEntity tile = position.getTileEntity(world);
-
-        if (tile instanceof TilePlasma)
-        {
-            ((TilePlasma) tile).setTemperature(evt.temperature);
+        	if (tile instanceof TilePlasma)	// получилась ли плазма?
+        	{
+        		((TilePlasma) tile).setTemperature(evt.temperature);
+        	}
         }
     }
 

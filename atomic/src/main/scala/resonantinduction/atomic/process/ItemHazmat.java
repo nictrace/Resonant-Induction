@@ -53,7 +53,7 @@ public class ItemHazmat extends ItemArmor implements IAntiPoisonArmor
         return this.armorType;
     }
 
-    @Override
+
     public boolean isPartOfSet(ItemStack armorStack, ItemStack compareStack)
     {
         if(armorStack != null && compareStack != null)
@@ -63,7 +63,7 @@ public class ItemHazmat extends ItemArmor implements IAntiPoisonArmor
         return false;
     }
 
-    @Override
+
     public boolean areAllPartsNeeded(ItemStack armorStack, EntityLivingBase entity, DamageSource source, Object... data)
     {
         return true;
